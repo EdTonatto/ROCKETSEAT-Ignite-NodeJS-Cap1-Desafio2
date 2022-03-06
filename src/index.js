@@ -33,7 +33,7 @@ function checksTodoExists(request, response, next) {
 	checksExistsUserAccount(request, response, next)
 	
 	const {id} = request.params
-	if(!isUuid(id))
+	if(!validate(id))
 		return response.status(400).json({error: "Given ID is not a valid UUID."})
 
 	const todo = users.todos.find((todo) => todo.id === id)
