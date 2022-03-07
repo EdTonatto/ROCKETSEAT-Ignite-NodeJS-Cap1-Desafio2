@@ -30,16 +30,20 @@ function checksCreateTodosUserAvailability(request, response, next) {
 }
 
 function checksTodoExists(request, response, next) {
-	checksExistsUserAccount(request, response, next)
-	
+	const {username} = request.headers
+	const user = users.find((user) => user.username === username)
+	if(!user)
+		return response.status(404).json({error: "User not found."})
+
 	const {id} = request.params
 	if(!validate(id))
 		return response.status(400).json({error: "Given ID is not a valid UUID."})
 
-	const todo = users.todos.find((todo) => todo.id === id)
+	const todo = user. todos.find((todo) => todo.id === id)
 	if(!todo)
 		return response.status(404).json({error: "To-do not found for this user."})		
 
+	request.user = user
 	request.todo = todo
 	return next()	
 }
